@@ -1,0 +1,105 @@
+<%include header.ejs%>
+<%include navigator.ejs%>
+
+
+<!--file upload config -->
+<script>
+var express = require('express');
+var multer = require('multer');
+var app = express();
+app.use(multer({ 
+    dest: './profile_pic/',
+    rename: function (fieldname, filename) {
+        return userName+filename;
+    },
+    onFileUploadStart: function (file) {
+        console.log(file.originalname + ' is uploading ...')
+    },
+    onFileUploadComplete: function (file) {
+        console.log(file.fieldname + ' uploaded to  ' + file.path)
+        fileUploadDone=true;
+    },
+    changeDest: function(dest, req, res) {
+        return dest + '/user_profile'; 
+    }
+}));
+</script>
+
+
+
+
+  <div class="container">
+        <div>
+          <h1 style="color:steelblue;font-family:calibri;text-align: center"><p style="text-align: center;margin-top:8%;margin-bottom:2%"><strong>My Profile</strong></p></h1>
+        </div>
+        <form action="changeProfile" method="get"> 
+        <div class="row" style="margin-bottom:2%">    
+          <div class="col-lg-2 col-lg-offset-4">
+            <!--<label for="inputEmail" class="sr-only">Email address</label>-->
+            <input style="margin-bottom:2%" type="text" name="firstName" class="form-control" placeholder="First Name" value="<%=firstName%>" required autofocus> 
+          </div>
+            <div class="col-lg-2">
+            <!--<label for="inputEmail" class="sr-only">Email address</label>-->
+            <input style="margin-bottom:2%"type="text" class="form-control" placeholder="Last Name" name="lastName" value="<%=lastName%>"required autofocus> 
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:2%">
+          <div class="col-lg-4 col-lg-offset-4"> 
+            <input style="margin-bottom:2%" type="text" id="title" class="form-control" placeholder="Title (eg. Mr. Mrs.)" name="suffix" value="<%=suffix%>" required autofocus> 
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:2%">
+          <div class="col-lg-4 col-lg-offset-4"> 
+            <input style="margin-bottom:2%" type="text" id="email" class="form-control" placeholder="Email" name="userId" value="<%=userName%>" required autofocus readonly> 
+          </div>
+        </div>
+        
+        <div class="row" style="margin-bottom:2%">
+          <div class="col-lg-4 col-lg-offset-4"> 
+            <input style="margin-bottom:2%;height:200px" type="text" id="name" class="form-control" placeholder="Self introduction" name="description" value="<%=description%>" required autofocus> 
+          </div>
+        </div>
+        <div class="col-lg-4 col-lg-offset-4">      
+          <button class="btn btn-lg btn-primary btn-block" style="align:center"type="submit">Submit</button>
+        </div>
+      </form>
+              <!-- profile picture upload -->
+        <div>
+          <script src="javascripts/readParams.js"></script>
+          <body>
+            <form   id        =  "uploadProfilePic"
+                    enctype   =  "multipart/form-data"
+                    action    =  "/profilePicUploaded"
+                    method    =  "post">
+                <input type="file" name="userPhoto" />
+                <input type="submit" value="Upload Image" name="submit">
+            </form>
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+          <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+        </div>
+        <div class="col-lg-4 col-lg-offset-4">      
+          <button class="btn btn-lg btn-primary btn-block" style="align:center"type="submit">Submit</button>
+        </div>
+      </div>
+  </div>
+<%include end.ejs%>
+
+
+
+<!--file upload Ajax -->
+ <script>
+  $(document).ready(function() {
+     $('#uploadProfilePic').submit(function() {
+        $(this).ajaxSubmit({
+            error: function(xhr) {
+                    status('Error: ' + xhr.status);
+            },
+            success: function(response) {
+                      console.log(response);
+            }
+    });
+    //Very important line, it disable the page refresh.
+    return false;
+    });    
+});
+</script>

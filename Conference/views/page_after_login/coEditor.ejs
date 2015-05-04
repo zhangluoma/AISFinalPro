@@ -1,0 +1,77 @@
+<textarea id="myEditor" rows="3" cols="20" onkeydown="editEvent(event)">
+</textarea>
+<script>
+	var editor = document.getElementById("myEditor");
+	var preStart;
+	var preEnd;
+	function setCursor(position){
+		editor.selectionStart=position;
+		editor.selectionEnd=position;
+	}
+	function select(start,end){
+		editor.selectionStart=start;
+		editor.selectionEnd=end;
+	}
+	function insertInto(position,text){
+		setCursor(position);
+		editor.setRangeText(text);
+	}
+	function replace(start,end,text){
+		select(start,end);
+		editor.setRangeText(text);
+	}
+	function deleteAt(position){
+		select(position-1,position);
+		editor.setRangeText("\b");
+	}
+	function restorePrePosition(){
+		editor.selectionStart=preStart;
+		editor.selectionEnd = preEnd;
+	}
+	function rememberCurrPosition(start,end){
+		preStart=start;
+		preEnd=end;
+	}
+	function editEvent(e){
+		var keynum;
+        if(window.event){ // IE					
+        	keynum = e.keyCode;
+        }else if(e.which){ // Netscape/Firefox/Opera					
+        	keynum = e.which;
+        }
+  		if(e.keyCode==8){
+  			coDeleteMessage(editor.selectionStart,editor.selectionEnd);
+  		}else{
+        	coEditorMessage(editor.selectionStart,editor.selectionEnd,String.fromCharCode(keynum));
+    	}
+	}
+	function coEditorMessage(start, end, text){
+		sendMessage("edit",{userName:userName, roomNumber:roomNumber,start:start,end:end,text:text});
+	}
+	function coDeleteMessage(start, end){
+		sendMessage("delete",{userName:userName, roomNumber:roomNumber,start:start,end:end});
+	}
+	function getChar(){
+		return editor.value.substring(editor.selectionStart,editor.selectionStart+1);
+	}
+	socket.on('edit',function(message){
+	   if(message["userName"]!=userName){
+	   		console.log("edit");
+	   		console.log(message);
+	   		replace(message["start"],message["end"],message["text"]);
+	   }
+	});
+	socket.on('delete',function(message){
+	   if(message["userName"]!=userName){
+	   		console.log("delete");
+	   		console.log(message);
+	   		var start= message["start"];
+	   		var end = message["end"]; 
+	   		if(message["start"]==message["end"]){
+	   			editor.value=editor.value.substring(0,start-1)+editor.value.substring(start);
+	   		}else{
+	   			editor.value=editor.substring(0,start)+editor.substring(end);
+	   		}
+	   }
+	});
+</script>

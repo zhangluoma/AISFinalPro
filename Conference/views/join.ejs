@@ -1,0 +1,19 @@
+<%include header.ejs%>
+<%include navigator.ejs%>
+    <div class="container">
+        <div>
+          <h1 style="font-family:calibri;text-align: center"><p style="text-align: center;margin-top:8%;margin-bottom:2%"><strong>Chose a Room</strong></p></h1>
+        </div>
+        <form action="joinRoomRequest" method="get"> 
+        <div class="row">    
+          <div class="col-lg-4 col-lg-offset-4">
+            <!--<label for="inputEmail" class="sr-only">Email address</label>-->
+            <input style="margin-bottom:2%" id="roomNumber" class="form-control" placeholder="Room number" name="roomNumber" <%if(roomNumber!=null){%>value="<%=roomNumber%>"<%}%> required autofocus> 
+          </div>
+        </div>
+        <div class="col-lg-4 col-lg-offset-4">      
+          <button class="btn btn-lg btn-primary btn-block" style="submit">Join</button>
+        </div>
+      </form>
+    </div>
+<%include end.ejs%>

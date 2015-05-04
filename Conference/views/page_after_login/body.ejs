@@ -1,0 +1,75 @@
+<% include header.ejs %>
+<div class="container">
+    <div class="masthead">
+      <img src="images/logo.png" height="25%" width="25%">
+      <a href="back"><button class="btn btn-primary" type="submit" style="float:right">Back</button></a>
+      <!--<div class="text-muted" style="float:right;margin-right:2%">Room Number:<%=roomNumber%></div>-->
+      <nav>
+        <ul class="nav nav-justified" style="margin-bottom:2%">
+          <li id="dashboardLabel" onclick="clickActive('dashboardLabel')"><a href="#">Dashboard</a></li>
+          <li id="videoLabel" class="active" onclick="clickActive('videoLabel')"><a href="#">VideoChat</a></li>
+          <li id="editorLabel" onclick="clickActive('editorLabel')"><a href="#">Editor</a></li>
+          <li id= "fileLabel" onclick="clickActive('fileLabel')"><a href="#">File</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div id="dashboardPart">
+        <%include dashboard.ejs%>
+      </div>
+      <div id="editorPart">
+        <%include coEditor.ejs%>
+      </div>
+      <div id="filePart">
+        <%include fileShare.ejs%>
+      </div>
+      <div id="videoPart">
+        <div class="col-sm-8 col-md-8" style="padding:0px">
+              <%include video.ejs%>
+          </div>
+          <div class="col-sm-4 col-md-4" style="padding:0px">
+            <%include chatRoom.ejs%>
+        </div>
+      </div>
+</div>
+<script>
+  var allLabel = ["dashboardLabel","videoLabel","fileLabel","editorLabel"];
+  var allPart = {"dashboardLabel":"dashboardPart","videoLabel":"videoPart","fileLabel":"filePart","editorLabel":"editorPart"};
+  clickActive("dashboardLabel");
+  function inactiveAll(){
+      for(var s in allLabel){
+        setInactive(allLabel[s]);
+        $('#'+allPart[allLabel[s]]).hide();
+      }
+  }
+  function setInactive(type){
+    document.getElementById(type).className="";
+  }
+  function clickActive(type){
+    inactiveAll();
+    console.log(type);
+    document.getElementById(type).className="active";
+    $('#'+allPart[type]).show();
+    if(type=="fileLabel"){
+      getFileList();
+    }
+  }
+  function getFileList(){
+    sendMessage("fileListRequest",{roomNumber:roomNumber});
+  }
+  socket.on('fileListResult',function(message){
+      clearList();
+      for(var i in message){
+          var curr = document.createElement("a");
+          curr.innerHTML=message[i]["filename"];
+          //curr.setAttribute("href","127.0.0.1:3000/uploads/"+message[i]["filename"]);
+          curr.setAttribute("href","/uploads/"+message[i]["filename"]);
+          var innerList = document.createElement("li");
+          innerList.appendChild(curr);
+          document.getElementById("fileList").appendChild(innerList);
+      }
+  });
+  function clearList(){
+    $('#fileList').empty();
+  }
+</script>
+<% include end.ejs %>
