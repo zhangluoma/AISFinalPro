@@ -1,4 +1,18 @@
-<a href="upload">upload</a>
+<html>
 <ul id="fileList">
     
 </ul>
+    <body>
+        <form action="/upload" enctype="multipart/form-data" method="post">
+        	<div class="btn-group">
+            	<input type="file" name="file" class="btn btn-info">
+            </div>
+            <div class="btn-group">
+            	<input hidden type="text" name="roomNumber" value= "<%=roomNumber%>">
+            </div>
+            	<input hidden type="text" name="userName" value= "<%=userName%>">
+            	<input type="submit" value="Upload" class="btn btn-info"> 
+  				<input type="submit" value="Cancel" class="btn btn-info">       	
+        </form>
+    </body>
+</html>

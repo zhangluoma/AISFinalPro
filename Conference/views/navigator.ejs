@@ -1,18 +1,27 @@
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <img src="images/logo.png" width="50%" height="50%">
-        </div>
+
+  <div class="container">
+    <div class="masthead">
+      
+        
         <% if(logedIn=="yes"){%>
+        <img src="images/logo.png" height="25%" width="25%">
         <input hidden id="userName" value=<%=userName%>>
         <script src="javascripts/readParams.js"></script>
-        <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+        <!--<div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">-->
+        <nav> 
+          <ul  class="nav nav-pills  nav-justified" style="margin-bottom:2%">
+            <li ><a href="dashboard">Enter a Room</a></li>
+            <li><a href="profile">My Profile</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="logout">Log Off</a></li>
+
+
+          </ul>
+        </nav>
+      
+          <!--<li id= "fileLabel" onclick="clickActive('fileLabel')"><a href="#">Log Off</a></li>
+        </ul>
+      </nav>
           <ul class="nav navbar-nav">
             <li><a href="dashboard">DashBoard</a></li>
             <li class="dropdown">
@@ -23,20 +32,23 @@
               </ul>
             </li>            
             <li><a href="#">Contact Us</a></li>
-          </ul>
-        </div>
-        <%}else{%>
+          </ul>-->
+        <%}
+        else{%>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" action="login" method="POST">
-            <div class="form-group">
+          <img src="images/logo.png" height="25%" width="25%" style="margin-top:1%">
+          <form class="navbar-form navbar-right" id="signIn" action="login" method="POST">
               <input type="email" placeholder="Email" class="form-control" name="userId">
-            </div>
-            <div class="form-group">
               <input type="password" placeholder="Password" class="form-control" name="password">
+              <button onclick="submitSignIn()" class="btn btn-info">Sign in</button>
             </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
           </form>
         </div><!--/.navbar-collapse -->
         <%}%>
+        <script>
+          function submitSignIn(){
+            document.getElementById("signIn").submit();
+          }
+        </script>
       </div>
-    </nav>
+    </div>

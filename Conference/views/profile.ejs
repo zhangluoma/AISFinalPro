@@ -59,9 +59,6 @@ app.use(multer({
             <input style="margin-bottom:2%;height:200px" type="text" id="name" class="form-control" placeholder="Self introduction" name="description" value="<%=description%>" required autofocus> 
           </div>
         </div>
-        <div class="col-lg-4 col-lg-offset-4">      
-          <button class="btn btn-lg btn-primary btn-block" style="align:center"type="submit">Submit</button>
-        </div>
       </form>
               <!-- profile picture upload -->
         <div>
@@ -71,14 +68,19 @@ app.use(multer({
                     enctype   =  "multipart/form-data"
                     action    =  "/profilePicUploaded"
                     method    =  "post">
-                <input type="file" name="userPhoto" />
-                <input type="submit" value="Upload Image" name="submit">
+            <div class="col-lg-4 col-lg-offset-4">
+              <div class="btn-group" >
+                <input style="margin-bottom:5%" type="file" name="userPhoto" class="btn btn-primary" >
+                <input style="margin-bottom:5%" type="submit" value="Upload Image" name="submit" class="btn btn-primary">
+
+              </div>
+            </div>
             </form>
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
           <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
         </div>
         <div class="col-lg-4 col-lg-offset-4">      
-          <button class="btn btn-lg btn-primary btn-block" style="align:center"type="submit">Submit</button>
+          <button class="btn btn-lg btn-info btn-block" type="submit">Submit</button>
         </div>
       </div>
   </div>
