@@ -1,0 +1,12 @@
+<html>
+    <body>
+        <form action="/upload" enctype="multipart/form-data" method="post">
+            <input type="file" name="file">
+            <input hidden type="text" name="roomNumber" value= "<%=roomNumber%>">
+            <input hidden type="text" name="userName" value= "<%=userName%>">
+            <input type="submit" value="Upload">
+        </form>
+        <div>Room Number : <%=roomNumber%></div>
+        <div>Username : <%=userName%></div>
+    </body>
+</html>

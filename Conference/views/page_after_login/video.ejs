@@ -1,0 +1,42 @@
+<style>
+    .videoContainer {
+        position: relative;
+        width: 100px;
+        height: 100px
+    }
+    .videoContainer video {
+        position: absolute;
+        width: 100%;
+        height: 100%
+    }
+    .volume {
+        position: absolute;
+        left: 15%;
+        width: 70%;
+        bottom: 5px;
+        height: 5px;
+        display: none
+    }
+    .connectionstate {
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        text-align: center;
+        color: #fff
+    }
+    #localScreenContainer {
+        display: none
+    }
+</style>
+<script src="javascripts/video.js"></script>
+<div style="overflow-y: scroll; overflow-x: hidden; margin: 0px 0px 10px 5px">
+    <div class="row" id="videoFrames">
+      <div class="col-lg-6">
+        <div class="thumbnail">
+          <div class="videoContainer" id="mainVideo">
+            <video id="localVideo" oncontextmenu="return false;"></video>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
