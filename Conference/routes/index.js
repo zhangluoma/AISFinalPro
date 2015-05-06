@@ -5,11 +5,10 @@ var um = require('userManagment');
 
 /* GET home page. */
 
-
 router.get('/', function(req, res, next) {
   if(req.session.userName){
   	um.login(req.session.userName,req.session.password,function(){
-  		res.render('join', { title: 'Welcome', roomNumber:req.session.roomNumber ,userName:req.session.userName,logedIn: "yes",footer: '' });
+  		res.render('join', { title: 'Welcome', roomNumber:req.session.roomNumber ,userName:req.session.userName,logedIn: "yes",footer: '', alert: " " , filePassword: req.session.filePassword , roomPassword: req.session.roomPassword});
 	},function(){
 		res.render('index', { title: 'Welcome', logedIn: "no", footer: '' });
 	});
@@ -17,7 +16,6 @@ router.get('/', function(req, res, next) {
   	res.render('index', { title: 'Welcome', logedIn: "no", footer: '' });
   }
 });
-
 
 //===========upload============
 router.get('/upload', function(req,res,next){
@@ -42,7 +40,6 @@ router.get('/profile', function(req, res, next) {
 	});
 });
 
-
 router.get('/logout', function(req, res, next) {
    req.session.destroy();
    res.redirect('/');
@@ -51,7 +48,7 @@ router.get('/logout', function(req, res, next) {
 
 router.get('/back', function(req, res, next) {
 	um.login(req.session.userName,req.session.password,function(){
-		res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: " " });
+		res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: " ", filePassword: req.session.filePassword });
 	}, function(){
 		res.render('index', { title: 'Welcome', logedIn: "no", footer: '' });
 	});
@@ -68,19 +65,17 @@ router.post('/signUp',function(req,res,next){
 	});
 });
 
-
 router.get('/dashboard', function(req, res, next) {
    um.login(req.session.userName,req.session.password,function(){
   		if(req.session.roomNumber!=undefined){
   			res.render('page_after_login/body', {userName:req.session.userName,roomNumber: req.session.roomNumber});
   		}else{
-  			res.render('join', { title: 'Welcome', userName:req.session.userName, logedIn: "yes", userId:req.session.userName,footer: '' });
+  			res.render('join', { title: 'Welcome', userName:req.session.userName, logedIn: "yes", userId:req.session.userName,footer: '', alert: " ", filePassword: req.session.filePassword, roomNumber: req.session.roomNumber, roomPassword:req.session.roomPassword });
   		}
 	},function(){
 		res.render('index', { title: 'Welcome', logedIn: "no", footer: '' });
 	});
 });
-
 
 router.get('/changeProfile',function(req,res,next){
 	um.setProfile(req.param('userId'),req.param('lastName'),req.param('firstName'),req.param('suffix'),req.param('description'),function(){
@@ -90,7 +85,6 @@ router.get('/changeProfile',function(req,res,next){
 	});
 });
 
-
 router.post('/login', function(req, res, next) {
 	var userId = req.body.userId;
 	var password = req.body.password;
@@ -99,7 +93,8 @@ router.post('/login', function(req, res, next) {
 		sess = req.session;
 		sess.userName=userId;
 		sess.password=password;
-		res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:userId,footer: '', roomPassword: req.session.roomPassword, alert: " " });
+		res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:userId,footer: '', roomPassword: req.session.roomPassword, alert: " " , filePassword: req.session.filePassword});
+
 	},function(){
 		res.send("fail!");
 	});
@@ -113,11 +108,15 @@ router.post('/joinRoomRequest', function(req, res, next) {
 		var roomNumber = req.body.roomNumber;
 		var roomPassword = req.body.roomPassword;
 		var requestType = req.body.requestType;
+		var filePassword = req.body.filePassword;
+
+		console.log("filePassword = "+filePassword);
+
 		req.session.roomNumber=roomNumber;
 		req.session.roomPassword=roomPassword;
-		var db = require('dbHelper');
+		req.session.filePassword = filePassword;
 
-		console.log("request type = "+requestType);
+		var db = require('dbHelper');
 
 		if (requestType==="join"){
 			//verify room credential function
@@ -136,7 +135,7 @@ router.post('/joinRoomRequest', function(req, res, next) {
 		  		res.render('page_after_login/body', {userName:req.session.userName,roomNumber: roomNumber, roomPassword: req.session.roomPassword});
 			},
 			function(){	//room credential bad
-				res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: "room does not exist or incorrect password." });
+				res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: "room does not exist or incorrect password.", filePassword: req.session.filePassword });
 			});
 		}else{
 			//verify existance function
@@ -152,10 +151,10 @@ router.post('/joinRoomRequest', function(req, res, next) {
 			//verify existance 
 		  	checkRoomExistance(roomNumber,
 		  	function(){	//room already existed
-				res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: "room with this room number already exists." });
+				res.render('join', { title: 'Welcome', roomNumber:'' ,userName:req.session.userName,logedIn: "yes", userId:req.session.userId,footer: '', roomPassword: req.session.roomPassword, alert: "room with this room number already exists.", filePassword: req.session.filePassword });
 			},
 			function(){	//room not exist
-				db.query("insert into room(roomNumber,password) values('"+roomNumber+"','"+roomPassword+"')",function(error,results){});
+				db.query("insert into room(roomNumber,password,filePassword) values('"+roomNumber+"','"+roomPassword+"','"+filePassword+"')",function(error,results){});
 		  		res.render('page_after_login/body', {userName:req.session.userName,roomNumber: roomNumber, roomPassword: req.session.roomPassword});
 			});
 		}

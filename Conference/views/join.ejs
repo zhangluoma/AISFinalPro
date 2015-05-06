@@ -6,7 +6,6 @@
           <h1 style="font-family:calibri;text-align: center"><p style="text-align: center;margin-top:8%;margin-bottom:2%"><strong>Chose a Room</strong></p></h1>
         </div>
 
-
         <form action="joinRoomRequest" id="roomInfo" method="POST"> 
         <input id="requestType" name="requestType" type="hidden">
         <div class="row">    
@@ -17,14 +16,18 @@
           </div>
           <div class="col-lg-4 col-lg-offset-4">
             <!--<label for="inputEmail" class="sr-only">Email address</label>-->
-            <input style="margin-bottom:2%" id="roomPassword" class="form-control" placeholder="Password" name="roomPassword" type="roomPassword" <%if(roomPassword!=null){%>value="<%=roomPassword%>"<%}%> required autofocus> 
+            <input style="margin-bottom:2%" id="roomPassword" class="form-control" placeholder="Room Password" name="roomPassword" type="roomPassword" <%if(roomPassword!=null){%>value="<%=roomPassword%>"<%}%> required autofocus> 
           </div>
         </div>
-        <div class="col-lg-4 col-lg-offset-4">      
-          <button class="btn btn-lg btn-primary btn-block" onclick="CreateRoom()">Create</button>
+        <div class="col-lg-4 col-lg-offset-4">   
+
+          <input style="margin-bottom:2%" id="filePassword" class="form-control" placeholder="File Password" name="filePassword" type="filePassword" <%if(filePassword!=null){%>value="<%=filePassword%>"<%}%> required autofocus> 
+
+          <button class="btn btn-lg btn-info btn-block" onclick="CreateRoom()">Create</button>
+
         </div>
         <div class="col-lg-4 col-lg-offset-4">      
-          <button class="btn btn-lg btn-primary btn-block" onclick="JoinRoom()">Join</button>
+          <button class="btn btn-lg btn-info btn-block" onclick="JoinRoom()">Join</button>
         </div>
       </form>
 

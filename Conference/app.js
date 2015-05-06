@@ -39,8 +39,6 @@ app.post('/upload', function(req, res) {
         //test
         var select_all_file_by_roomnumber = function(){
           db.query("select * from file where roomnumber = '"+roomNmber+"'",function(error,results){
-            //console.log(results);
-            //console.log("just printed the sql select result.");
           });
         };
         addFiletoTable();

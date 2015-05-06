@@ -55,6 +55,37 @@ io.sockets.on('connection',function(socket){
         socket.emit('fileListResult',results);
     },function(){});
   });
+  socket.on('askFilelist',function(message){
+    //console.log("the result is :");
+    //console.log(message);
+    var roomNumber = message['roomNumber'];
+    var filePassword = message['filePassword'];
+    //console.log("roomNumber="+roomNumber+" filePassword="+filePassword);
+    //check file password function
+    var checkFilePassword = function(roomNumber, filePassword, onSuccess, onFailure){
+        db.query("select * from room where roomnumber = '"+roomNumber+"' AND filePassword = '"+filePassword+"'",function(error,results){
+            if(error || results.length==0){
+                onFailure();
+            }else{
+                onSuccess();
+            }
+        });
+    }
+    //verify file password
+    checkFilePassword(roomNumber, filePassword,
+    function(){ //file password good
+        select_all_file_by_roomnumber(message['roomNumber'],function(results){
+            socket.emit('fileListResult',results);
+        },function(){});
+    },
+    function(){ //file password bad
+        var r = " ";
+        socket.emit('filePasswordWrong',r);
+    });    
+
+
+
+  });
 });
 var select_all_file_by_roomnumber = function(roomNumber,onSuccess,onFailure){
   db.query("select * from file where roomnumber = '"+roomNumber+"'",function(error,results){

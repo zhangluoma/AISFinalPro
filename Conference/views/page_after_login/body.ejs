@@ -1,18 +1,17 @@
 <% include header.ejs %>
 <div class="container">
-    <div class="masthead">
       <img src="images/logo.png" height="25%" width="25%">
-      <a href="back"><button class="btn btn-primary" type="submit" style="float:right">Back</button></a>
+      <a href="back"><button class="btn btn-info" type="submit" style="float:right">Back</button></a>
       <!--<div class="text-muted" style="float:right;margin-right:2%">Room Number:<%=roomNumber%></div>-->
       <nav>
-        <ul class="nav nav-justified" style="margin-bottom:2%">
+        <ul class="nav nav-pills nav-justified" style="margin-bottom:2%">
           <li id="dashboardLabel" onclick="clickActive('dashboardLabel')"><a href="#">Dashboard</a></li>
           <li id="videoLabel" class="active" onclick="clickActive('videoLabel')"><a href="#">VideoChat</a></li>
           <li id="editorLabel" onclick="clickActive('editorLabel')"><a href="#">Editor</a></li>
           <li id= "fileLabel" onclick="clickActive('fileLabel')"><a href="#">File</a></li>
         </ul>
       </nav>
-    </div>
+
     <div id="dashboardPart">
         <%include dashboard.ejs%>
       </div>
@@ -46,12 +45,8 @@
   }
   function clickActive(type){
     inactiveAll();
-    console.log(type);
     document.getElementById(type).className="active";
     $('#'+allPart[type]).show();
-    if(type=="fileLabel"){
-      getFileList();
-    }
   }
   function getFileList(){
     sendMessage("fileListRequest",{roomNumber:roomNumber});
@@ -66,7 +61,14 @@
           var innerList = document.createElement("li");
           innerList.appendChild(curr);
           document.getElementById("fileList").appendChild(innerList);
+          document.getElementById("AlertFilePasswordWrong").style.visibility = "hidden";
+          document.getElementById("filePassword").style.visibility = "hidden";
+          document.getElementById("filePasswordSubmit").style.visibility = "hidden";
       }
+  });
+
+  socket.on('filePasswordWrong',function(message){
+      document.getElementById("AlertFilePasswordWrong").style.visibility = "visible";
   });
   function clearList(){
     $('#fileList').empty();
