@@ -12,22 +12,17 @@
           <a style="color:red"><%=alert%></a>
           <div class="col-lg-4 col-lg-offset-4">
             <!--<label for="inputEmail" class="sr-only">Email address</label>-->
-            <input style="margin-bottom:2%" id="roomNumber" class="form-control" placeholder="Room number" name="roomNumber" type="roomNumber" <%if(roomNumber!=null){%>value="<%=roomNumber%>"<%}%> required autofocus> 
-          </div>
-          <div class="col-lg-4 col-lg-offset-4">
+            <input style="margin:5px" id="roomNumber" class="form-control" placeholder="Room number" name="roomNumber" type="roomNumber" <%if(roomNumber!=null){%>value="<%=roomNumber%>"<%}%> required autofocus> 
             <!--<label for="inputEmail" class="sr-only">Email address</label>-->
-            <input style="margin-bottom:2%" id="roomPassword" class="form-control" placeholder="Room Password" name="roomPassword" type="roomPassword" <%if(roomPassword!=null){%>value="<%=roomPassword%>"<%}%> required autofocus> 
+            <input style="margin:5px" id="roomPassword" class="form-control" placeholder="Room Password" name="roomPassword" type="roomPassword" <%if(roomPassword!=null){%>value="<%=roomPassword%>"<%}%> required autofocus> 
           </div>
-        </div>
         <div class="col-lg-4 col-lg-offset-4">   
 
-          <input style="margin-bottom:2%" id="filePassword" class="form-control" placeholder="File Password" name="filePassword" type="filePassword" <%if(filePassword!=null){%>value="<%=filePassword%>"<%}%> required autofocus> 
+          <input style="margin:5px" id="filePassword" class="form-control" placeholder="File Password" name="filePassword" type="filePassword" <%if(filePassword!=null){%>value="<%=filePassword%>"<%}%> required autofocus> 
 
-          <button class="btn btn-lg btn-info btn-block" onclick="CreateRoom()">Create</button>
-
+          <button class="btn btn-lg btn-info btn-block" style="margin:5px" onclick="CreateRoom()">Create</button>  
+          <button class="btn btn-lg btn-info btn-block" style="margin:5px" onclick="JoinRoom()">Join</button>
         </div>
-        <div class="col-lg-4 col-lg-offset-4">      
-          <button class="btn btn-lg btn-info btn-block" onclick="JoinRoom()">Join</button>
         </div>
       </form>
 
