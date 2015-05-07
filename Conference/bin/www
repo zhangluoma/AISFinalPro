@@ -9,6 +9,7 @@ var debug = require('debug')('Conference:server');
 var http = require('http');
 var socketIO = require('socket.io');
 var db = require('dbHelper');
+var um = require('userManagment');
 /**
  * Get port from environment and store in Express.
  */
@@ -82,11 +83,34 @@ io.sockets.on('connection',function(socket){
         var r = " ";
         socket.emit('filePasswordWrong',r);
     });    
-
-
-
   });
+  socket.on("getProposalRequest",function(message){
+    //console.log(message);
+    get_proposal_by_roomNumber(message['roomNumber'],function(results){
+        socket.emit('queryProposalResult',results);
+        console.log(results);
+    },function(){});
+  });
+  socket.on("voteResult",function(message){
+    var roomNumber =  message["roomNumber"];
+    var votingList = message["votingList"];
+    for(var description in votingList){
+        var currResult = votingList[description];
+        console.log(roomNumber);
+        console.log(description);
+        console.log(currResult);
+        um.increaseVote(roomNumber, description, currResult, function(){}, function(){});
+    }
+    io.sockets.in(roomNumber).emit("updateVote",1);
+  });
+  socket.on("insertProposalRequest", function(message){
+    console.log(message['roomNumber']);
+    um.insertProposal(message['roomNumber'],message['description'],message['options'],function(result){socket.emit('insertSuccess',result)},function(){});
+  },function(){});
 });
+var get_proposal_by_roomNumber = function(roomNumber, onSuccess, onFailure){
+  um.readProposal(roomNumber,onSuccess,onFailure);
+}
 var select_all_file_by_roomnumber = function(roomNumber,onSuccess,onFailure){
   db.query("select * from file where roomnumber = '"+roomNumber+"'",function(error,results){
     if(error){
@@ -95,7 +119,7 @@ var select_all_file_by_roomnumber = function(roomNumber,onSuccess,onFailure){
       onSuccess(results);
     }
   });
-};
+}
 /**
  * Normalize a port into a number, string, or false.
  */

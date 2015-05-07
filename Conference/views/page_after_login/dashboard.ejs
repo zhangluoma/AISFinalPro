@@ -1,1 +1,99 @@
-Coming soon!
+<div class="col-sm-4 col-md-4" style="padding:0px">
+	<div id="video-window" class="col-sm-9 col-md-9" style="padding:0px;height:100%">
+		<div class="panel panel-primary">
+			<div id="videoHead" class="panel-heading">
+				<h3 id="alertInfo" class="ui header">My Proposal</h3>
+			</div>
+			<div class="panel-body" style="padding:5px">
+				<div class="input-group input-group-lg">
+  					<div id="myProposal">
+  						<input type="text" class="form-control" placeholder="Your proposal">
+  					</div>
+  					<button class = "btn btn-default" onclick="addRow()">add Option</button>
+					<button class = "btn btn-default" onclick="insertProposal()">submit</button>
+					<button class = "btn btn-default" onclick="vote()">vote</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu4">
+					  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Regular link</a></li>
+					  <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Disabled link</a></li>
+					  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another link</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-sm-8 col-md-8">
+	<div id="proposals">
+		
+	</div>
+</div>
+
+<script>
+	var proposal = $('#myProposal');
+	var proposals = document.getElementById("proposals");
+	function addRow(){
+		var input = document.createElement("input");
+		input.setAttribute("type", "text");
+		input.setAttribute("class","form-control");
+		proposal.append(input);
+	}
+	function addProposal(description, option, vote){
+		var res = option.split(":::");
+		var votingResult = vote.split(":::");
+		console.log(votingResult);
+		var proposalLength = res.length;//proposal.children().length;
+		//var title = document.createElement("p");
+		//currPro.childNodes[0].value="aa";
+		//alert(title.value);
+		var proTitle = document.createElement("p");
+		proTitle.setAttribute("style","color:red");
+		proTitle.innerHTML = description;
+		proposals.appendChild(proTitle);
+		var subDiv = document.createElement("div");
+		for(var i=0;i<proposalLength;i++){
+			var currLine = document.createElement("input");
+			currLine.setAttribute("type","checkbox");
+			subDiv.appendChild(currLine);
+			var selection = document.createElement("span");
+			selection.innerHTML = res[i]+"----"+votingResult[i];
+			var br = document.createElement("br");
+			subDiv.appendChild(selection);
+			subDiv.appendChild(br);
+		}
+		proposals.appendChild(subDiv);
+	}
+	function insertProposal(){
+		var proposalLength = proposal.children().length;
+		if(proposalLength==1){
+			alert("give some options!");
+			return;
+		}
+		var description = proposal.children()[0].value;
+		var options = proposal.children()[1].value;
+		for(var i=2;i<proposalLength;i++){
+			options = options + ":::" + proposal.children()[i].value;
+		}
+		sendMessage("insertProposalRequest",{description:description,options:options,roomNumber:roomNumber});
+		//getProposals();
+	}
+	function vote(){
+		var children = $('#proposals').children();
+		var length = $('#proposals').children().length/2;
+		var votingList = {};
+		for(var i=0;i<length;i++){
+			var description = children[2*i].innerHTML;
+			votingList[description] = [];
+			var options = $(children[2*i+1]);
+			var number =  options.children().length/3;
+			for(var j=0;j<number;j++){
+				var checkBox = options.children()[3*j];
+				var optionName = options.children()[3*j+1].innerHTML;
+				if(checkBox.checked){
+					votingList[description].push(j);
+				}
+			}
+		}
+		console.log(votingList);
+		sendMessage("voteResult",{votingList:votingList,roomNumber:roomNumber});
+	}
+</script>
