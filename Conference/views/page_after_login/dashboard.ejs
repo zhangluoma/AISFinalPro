@@ -7,11 +7,11 @@
 			<div class="panel-body" style="padding:5px">
 				<div class="input-group input-group-lg">
   					<div id="myProposal">
-  						<input type="text" class="form-control" placeholder="Your proposal">
+  						<input type="text" class="form-control" style="color:white" placeholder="Your proposal">
   					</div>
-  					<button class = "btn btn-default" onclick="addRow()">add Option</button>
-					<button class = "btn btn-default" onclick="insertProposal()">submit</button>
-					<button class = "btn btn-default" onclick="vote()">vote</button>
+  					<button class = "btn btn-info" onclick="addRow()">add Option</button>
+					<button class = "btn btn-info" onclick="insertProposal()">submit</button>
+					<button class = "btn btn-info" onclick="vote()">vote</button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu4">
 					  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Regular link</a></li>
 					  <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Disabled link</a></li>
@@ -46,7 +46,7 @@
 		//currPro.childNodes[0].value="aa";
 		//alert(title.value);
 		var proTitle = document.createElement("p");
-		proTitle.setAttribute("style","color:red");
+		proTitle.setAttribute("style","color:DodgerBlue");
 		proTitle.innerHTML = description;
 		proposals.appendChild(proTitle);
 		var subDiv = document.createElement("div");
