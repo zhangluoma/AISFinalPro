@@ -99,13 +99,12 @@ io.sockets.on('connection',function(socket){
         console.log(roomNumber);
         console.log(description);
         console.log(currResult);
-        um.increaseVote(roomNumber, description, currResult, function(){}, function(){});
+        um.increaseVote(roomNumber, description, currResult, function(){io.sockets.in(roomNumber).emit("updateVote",1);}, function(){});
     }
-    io.sockets.in(roomNumber).emit("updateVote",1);
   });
   socket.on("insertProposalRequest", function(message){
     console.log(message['roomNumber']);
-    um.insertProposal(message['roomNumber'],message['description'],message['options'],function(result){socket.emit('insertSuccess',result)},function(){});
+    um.insertProposal(message['roomNumber'],message['description'],message['options'],function(result){socket.emit('insertSuccess',result);io.sockets.in(message['roomNumber']).emit("updateVote",1);},function(){});
   },function(){});
 });
 var get_proposal_by_roomNumber = function(roomNumber, onSuccess, onFailure){
